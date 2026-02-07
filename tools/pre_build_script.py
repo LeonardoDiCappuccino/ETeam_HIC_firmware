@@ -112,6 +112,6 @@ def generate_version_file(version_git_dir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='git version generator')
-    parser.add_argument("--version_git_dir", type=str, default='../../../source/daplink/', help="directory to output version_git.h file")
+    parser.add_argument("--version_git_dir", type=str, default='./source/daplink/', help="directory to output version_git.h file")
     args = parser.parse_args()
     exit(generate_version_file(args.version_git_dir))

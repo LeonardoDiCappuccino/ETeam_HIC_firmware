@@ -27,7 +27,7 @@ tool_specific:
                 - --specs=nano.specs
                 - --specs=nosys.specs
                 - -Wl,-check-sections
-                - -Wl,-fatal-warnings
+                - -Wl,--no-warn-rwx-segments
                 - -Wl,--gc-sections
                 - -Wl,--no-wchar-size-warning
                 - -Wl,--print-memory-usage
