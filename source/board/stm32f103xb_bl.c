@@ -22,6 +22,34 @@
 #include "target_config.h"
 #include "target_board.h"
 #include "target_family.h"
+#include "stm32f1xx.h"
+#include <stdbool.h>
+
+// NF-RST Button on PB15 for entering maintenance mode
+#define NF_RST_BTN_PORT  GPIOB
+#define NF_RST_BTN_PIN   GPIO_PIN_15
+
+// Initialize NF-RST button pin as input with pull-up for bootloader
+void board_bootloader_init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+    
+    // Configure PB15 (NF-RST button) as input with pull-up
+    GPIO_InitStructure.Pin = NF_RST_BTN_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(NF_RST_BTN_PORT, &GPIO_InitStructure);
+}
+
+// Override reset_button_pressed to check PB15 (NF-RST button).
+// This prevents the bootloader from staying in maintenance mode
+// when no target is connected (which can cause the reset pin to float low).
+// Hold NF-RST button while plugging in USB to enter maintenance mode.
+bool reset_button_pressed(void)
+{
+    // Button is active low (pressed = 0)
+    return (NF_RST_BTN_PORT->IDR & NF_RST_BTN_PIN) == 0;
+}
 
 /**
 * List of start and size for each size of flash sector
