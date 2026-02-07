@@ -1,0 +1,6 @@
+common:
+    sources:
+        board:
+            - source/board/stm32f103cb.c
+        family:
+            - source/family/st/stm32f103cb/target.c
