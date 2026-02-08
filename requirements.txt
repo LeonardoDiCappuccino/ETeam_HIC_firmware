@@ -13,4 +13,3 @@ pyelftools
 fuzzywuzzy
 jsonschema
 pyyaml>=6.0,<7.0
-pyocd

@@ -30,9 +30,10 @@ venv/Scripts/activate.bat
 pip install -r requirements.txt
 ```
 
-Fix progen under windows (recommended):
+Fixing bugs under windows (recommended):
 ```
 cp .\makefile.tmpl .\venv\Lib\site-packages\project_generator\templates\makefile.tmpl
+cp .\libusb-1.0.dll .\venv\Scripts\libusb-1.0.dll
 ```
 
 # Building
