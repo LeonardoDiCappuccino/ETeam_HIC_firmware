@@ -2,7 +2,7 @@
 
 This is the firmware sourcecode for the ETeam HIC, based on [DAPLink](https://daplink.io/) V0257 (Copyright © 2006-2023 Arm Ltd)
 It has been adapted to meet requirements and fixed related bugs. Due to the fragility of the project generator and modifications,
-DapLink V0257 currently the only working release so DO NOT UPDATE!
+DAPLink V0257 currently the only working release so DO NOT UPDATE!
 
 # Requirements
 
@@ -14,8 +14,8 @@ DapLink V0257 currently the only working release so DO NOT UPDATE!
 
 Clone:
 ```
-git clone ../DapLink_ETeam.git
-cd DapLink_ETeam
+git clone ../DAPLink_ETeam.git
+cd DAPLink_ETeam
 ```
 
 Install [virtualvenv](https://virtualenv.pypa.io/en/latest/user_guide.html) with Python 3.9:
@@ -91,12 +91,12 @@ Feel free to add further ones ([Reference](https://github.com/ARMmbed/DAPLink/bl
 
 1. Wire up a ST-Link, (working) ETeam HIC, etc. to the "Firmware SWD" pins of the unprogrammed HIC
 2. Use...
-    - STM32CubeProgrammer
     - pyOCD:
         ```
         pyocd install stm32f103cb   # only if not already installed
         pyocd pyocd flash --erase chip -t stm32f103cb .\projectfiles\make_gcc_arm\stm32f103xb_bl_crc.hex
         ```
+    - STM32CubeProgrammer
     - etc.
     to flash the bootloader executable (``projectfiles/<target>/stm32f103xb_bl_crc.hex`` or ``.bin``)
 3. Now you are ready to flash the Interface Firmware
@@ -106,3 +106,41 @@ Feel free to add further ones ([Reference](https://github.com/ARMmbed/DAPLink/bl
 1. Plug in the HIC via USB into a computer, while **shorting the "Firmware" jumper** with tweezers or so
 2. A drive called "MAINTENANCE" should pop up. There you just drag-n-drop the wished Interface Firmware(``projectfiles/\<target\>/stm32f103xb_<target or "generic">_if_crc.hex`` or ``.bin``)
 3. Power cycle the HIC
+
+# Usage
+
+This is now a fully functioning DAPLink and can be used with all kinds of software, like OpenOCD, PyOCD, Debug tools, IDEs, etc.
+
+## STM32CubeIDE
+
+ST doesn't support DAPLink by default, so we need a little workaround here
+
+1. Create a file called ``daplink.cfg`` in the projects root dir and copy this into it:
+    ```
+   source [find interface/cmsis-dap.cfg]
+    adapter speed 1000
+    transport select swd
+
+    # This should be your target MCU, typically stm32f1x.cfg, stm32f4x.cfg, ...
+    source [find target/<target>]
+
+    reset_config none
+
+    $_TARGETNAME configure -event reset-init {
+        halt
+    }
+
+    $_TARGETNAME configure -event gdb-attach {
+        reset init
+        halt
+    }
+    ```
+2. Make sure you have replaced ``<target>`` in the ``daplink.cfg`` file with your MCUs OpenOCD target, e.g. ``stm32f0x.cfg``, ``stm32f1x.cfg``, ``stm32f4x.cfg``, ``stm32f7x.cfg``
+3. Now go to Run -> Debug Configurations and select your application config
+    ![[docs/images/STM32_Debug_config.png]]
+    If you don't have a application config, create one by double clicking ``STM32 C/C++ Application``
+4. Navigate to ``Debugger`` and change the following settings:
+    - Select ``ST-LINK (OpenOCD)`` under ``Debug probe``
+    - Check ``User Defined`` under ``Configuration Script``
+    - Click on ``Browse...`` under ``Configuration Script`` and select the ``daplink.cfg`` file from step 1
+5. Click ``Apply`` and you should be ready to go
