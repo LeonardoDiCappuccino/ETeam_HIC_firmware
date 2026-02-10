@@ -137,7 +137,7 @@ ST doesn't support DAPLink by default, so we need a little workaround here
     ```
 2. Make sure you have replaced ``<target>`` in the ``daplink.cfg`` file with your MCUs OpenOCD target, e.g. ``stm32f0x.cfg``, ``stm32f1x.cfg``, ``stm32f4x.cfg``, ``stm32f7x.cfg``
 3. Now go to Run -> Debug Configurations and select your application config
-    ![[docs/images/STM32_Debug_config.png]]
+    ![STM32 debug config](docs/images/STM32_Debug_config.png)
     If you don't have a application config, create one by double clicking ``STM32 C/C++ Application``
 4. Navigate to ``Debugger`` and change the following settings:
     - Select ``ST-LINK (OpenOCD)`` under ``Debug probe``
