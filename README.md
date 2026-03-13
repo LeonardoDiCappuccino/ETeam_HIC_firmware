@@ -94,7 +94,7 @@ Feel free to add further ones ([Reference](https://github.com/ARMmbed/DAPLink/bl
     - pyOCD:
         ```
         pyocd install stm32f103cb   # only if not already installed
-        pyocd pyocd flash --erase chip -t stm32f103cb .\projectfiles\make_gcc_arm\stm32f103xb_bl_crc.hex
+        pyocd flash --erase chip -t stm32f103cb .\projectfiles\make_gcc_arm\stm32f103xb_bl_crc.hex
         ```
     - STM32CubeProgrammer
     - etc.
